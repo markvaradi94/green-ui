@@ -1,0 +1,7 @@
+{
+  "name": "green-ui",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
