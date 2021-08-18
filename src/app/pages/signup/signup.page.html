@@ -1,0 +1,40 @@
+<ion-header class="ion-padding ion-justify-content-center">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/tabs/profile"></ion-back-button>
+    </ion-buttons>
+    <ion-title>SIGNUP</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <form #signupForm="ngForm" (ngSubmit)="doSignup()">
+    <ion-list>
+
+      <ion-item>
+        <ion-label slot="fixed">email</ion-label>
+        <ion-input [(ngModel)]="account.email" required placeholder="email" type="email" name="email"></ion-input>
+      </ion-item>
+
+
+      <ion-item>
+        <ion-label slot="fixed">PASSWORD</ion-label>
+        <ion-input [(ngModel)]="account.password" required placeholder="password" type="password" name="password"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label slot="fixed">PHONE NUMBER</ion-label>
+        <ion-input [(ngModel)]="account.phoneNumber" required placeholder="phone number" type="text" name="phone number"></ion-input>
+      </ion-item>
+
+      <div class="ion-padding-top">
+        <ion-button
+          [disabled]="!signupForm.valid"
+          expand="block"
+          color="primary"
+          type="submit">SIGN UP</ion-button>
+      </div>
+
+    </ion-list>
+  </form>
+</ion-content>

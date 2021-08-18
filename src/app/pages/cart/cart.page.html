@@ -1,0 +1,31 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>cart</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <ion-list>
+    <ion-item *ngFor="let bag of client?.cart?.bags">
+      {{bag?.description}}
+      <ion-item slot="end">
+        {{bag.price}} x {{bag?.quantity}}
+        <ion-buttons slot="end">
+          <ion-button (click)="removeBag(bag)">
+            <ion-icon name="trash-outline"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+      </ion-item>
+    </ion-item>
+  </ion-list>
+
+</ion-content>
+
+<ion-footer>
+  <ion-item>
+    Total Price:
+    <ion-item slot="end">{{client?.cart?.totalPrice}}</ion-item>
+  </ion-item>
+  <ion-button (click)="createOrder(client.cart)" [disabled]="client?.cart?.bags?.length === 0" expand="full">PLACE ORDER</ion-button>
+</ion-footer>

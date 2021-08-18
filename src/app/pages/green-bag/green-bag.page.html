@@ -1,0 +1,44 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title>GreenBag</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-card *ngIf="greenBag" class="provider-card">
+    <ion-card-header>{{greenBag?.description}}</ion-card-header>
+    <ion-card-content>
+      Bags available: {{ greenBag?.quantity }}
+    </ion-card-content>
+
+    <ion-item class="provider-info" lines="none">
+      <ion-icon name="cash-outline" slot="start"></ion-icon>
+      Price: {{greenBag?.price}} RON
+    </ion-item>
+  </ion-card>
+  <ion-item>
+    <ion-buttons>
+      <ion-button (click)="decreaseAmount()" [disabled]="!canBeDecreased()">
+        <ion-icon name="remove-circle-outline"></ion-icon>
+      </ion-button>
+      <ion-button (click)="increaseAmount()" [disabled]="!canBeIncreased()">
+        <ion-icon name="add-circle-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-item slot="end">{{amountToOrder}}</ion-item>
+  </ion-item>
+</ion-content>
+
+<ion-footer>
+  <ion-button
+    expand="full"
+    class="ion-padding-bottom"
+    (click)="addToCart()"
+    [disabled]="amountToOrder === 0 || client === undefined"
+    style="height: 8vh; font-weight: bold">
+    ADD TO CART
+  </ion-button>
+</ion-footer>

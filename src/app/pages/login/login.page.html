@@ -1,0 +1,36 @@
+<ion-header class="ion-padding ion-justify-content-center">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/welcome"></ion-back-button>
+    </ion-buttons>
+    <ion-title>LOGIN</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <form #loginForm="ngForm" (ngSubmit)="doLogin(loginForm)">
+    <ion-list>
+
+      <ion-item>
+        <ion-label slot="fixed">EMAIL</ion-label>
+        <ion-input ngModel required placeholder="email" type="email" name="email"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label slot="fixed">PASSWORD</ion-label>
+        <ion-input ngModel required placeholder="password" type="password" name="password"></ion-input>
+      </ion-item>
+
+      <div class="ion-padding-top">
+        <ion-button
+          [disabled]="!loginForm.valid"
+          expand="block"
+          color="primary"
+          type="submit">
+          LOGIN
+        </ion-button>
+      </div>
+
+    </ion-list>
+  </form>
+</ion-content>

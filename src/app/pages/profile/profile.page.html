@@ -1,0 +1,31 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>{{ headerTitle }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <h3 class="ion-padding-horizontal" *ngIf="!accountIsLoggedIn">Login to order</h3>
+  <ion-toolbar>
+    <ion-grid>
+      <ion-row>
+        <ion-col>
+          <ion-button expand="block" (click)="login()" *ngIf="!accountIsLoggedIn">LOGIN</ion-button>
+        </ion-col>
+        <ion-col>
+          <ion-button expand="block" (click)="signup()" *ngIf="!accountIsLoggedIn">SIGNUP</ion-button>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <ion-button expand="block" (click)="logout()" *ngIf="accountIsLoggedIn">LOGOUT</ion-button>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <ion-button expand="block" (click)="editProfile(client.id)" *ngIf="accountIsLoggedIn">EDIT PROFILE</ion-button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-toolbar>
+</ion-content>
