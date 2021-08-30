@@ -13,18 +13,44 @@
 
       <ion-item>
         <ion-label slot="fixed">email</ion-label>
-        <ion-input [(ngModel)]="account.email" required placeholder="email" type="email" name="email"></ion-input>
+        <ion-input [(ngModel)]="account.email" required placeholder="Email" type="email" name="email"></ion-input>
       </ion-item>
 
 
       <ion-item>
         <ion-label slot="fixed">PASSWORD</ion-label>
-        <ion-input [(ngModel)]="account.password" required placeholder="password" type="password" name="password"></ion-input>
+        <ion-input [(ngModel)]="account.password" required placeholder="Password" type="password" name="password"></ion-input>
       </ion-item>
 
       <ion-item>
         <ion-label slot="fixed">PHONE NUMBER</ion-label>
-        <ion-input [(ngModel)]="account.phoneNumber" required placeholder="phone number" type="text" name="phone number"></ion-input>
+        <ion-input [(ngModel)]="account.phoneNumber" required placeholder="Phone number" type="text" name="phone number"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label slot="fixed">FIRST NAME</ion-label>
+        <ion-input [(ngModel)]="firstName" required placeholder="First Name" type="text" name="firstName"></ion-input>
+      </ion-item>
+
+
+      <ion-item>
+        <ion-label slot="fixed">LAST NAME</ion-label>
+        <ion-input [(ngModel)]="lastName" required placeholder="Last Name" type="text" name="lastName"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label slot="fixed">CITY</ion-label>
+        <ion-input [(ngModel)]="address.city" required placeholder="City" type="text" name="city"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label slot="fixed">STREET NAME</ion-label>
+        <ion-input [(ngModel)]="address.streetName" required placeholder="Street Name" type="text" name="streetName"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label slot="fixed">STREET NUMBER</ion-label>
+        <ion-input [(ngModel)]="address.streetNumber" required placeholder="Street Number" type="text" name="streetNumber"></ion-input>
       </ion-item>
 
       <div class="ion-padding-top">

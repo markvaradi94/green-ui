@@ -8,6 +8,11 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HttpClientModule } from '@angular/common/http';
 import { IonicStorageModule, Storage } from '@ionic/storage-angular';
+import { OrderService } from './services/order.service';
+import { AccountService } from './services/account.service';
+import { ClientService } from './services/client.service';
+import { ProviderService } from './services/provider.service';
+import { ApiService } from './services/api.service';
 
 @NgModule({
   declarations: [AppComponent],
@@ -15,7 +20,12 @@ import { IonicStorageModule, Storage } from '@ionic/storage-angular';
   imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, HttpClientModule, IonicStorageModule],
   providers: [
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
-    Storage
+    Storage,
+    OrderService,
+    AccountService,
+    ClientService,
+    ProviderService,
+    ApiService
   ],
   bootstrap: [AppComponent],
 })

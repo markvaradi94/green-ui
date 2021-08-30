@@ -3,7 +3,7 @@
     <ion-buttons slot="start">
       <ion-back-button></ion-back-button>
     </ion-buttons>
-    <ion-title>GreenBag</ion-title>
+    <ion-title>{{greenBag?.description}}</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -37,7 +37,7 @@
     expand="full"
     class="ion-padding-bottom"
     (click)="addToCart()"
-    [disabled]="amountToOrder === 0 || client === undefined"
+    [disabled]="amountToOrder === 0 || !client"
     style="height: 8vh; font-weight: bold">
     ADD TO CART
   </ion-button>

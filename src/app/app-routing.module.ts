@@ -25,6 +25,22 @@ const routes: Routes = [
   {
     path: 'clients/:clientId/details',
     loadChildren: () => import('./pages/client-details/client-details.module').then( m => m.ClientDetailsPageModule)
+  },
+  {
+    path: 'orders/:orderId',
+    loadChildren: () => import('./pages/order-details/order-details.module').then( m => m.OrderDetailsPageModule)
+  },
+  {
+    path: 'providers/:providerId/info',
+    loadChildren: () => import('./pages/provider-info/provider-info.module').then( m => m.ProviderInfoPageModule)
+  },
+  {
+    path: 'providers/:providerId/bags/:bagId/info',
+    loadChildren: () => import('./pages/bag-info/bag-info.module').then( m => m.BagInfoPageModule)
+  },
+  {
+    path: 'providers/:providerId/new-bag',
+    loadChildren: () => import('./pages/new-bag/new-bag.module').then( m => m.NewBagPageModule)
   }
 ];
 @NgModule({

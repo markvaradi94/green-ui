@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 import { Storage } from '@ionic/storage-angular';
 import { Client } from '../dto/client.dto';
+import { ApiService } from './api.service';
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +11,8 @@ export class ClientService {
   public clientSubj = new Subject<Client>();
   private CLIENT_STORAGE_KEY = 'client';
 
-  constructor(private storage: Storage) {
+  constructor(private storage: Storage,
+              private apiService: ApiService) {
     this.storage.create();
   }
 
@@ -26,7 +28,12 @@ export class ClientService {
     this.storage.clear();
   }
 
+  patchClient(client: Client, patch: any) {
+    this.apiService.patchClient(client.id, patch).subscribe(() => {
+    });
+  }
+
   async getClient(): Promise<string> {
-    return await this.storage.get(this.CLIENT_STORAGE_KEY);
+    return this.storage.get(this.CLIENT_STORAGE_KEY);
   }
 }

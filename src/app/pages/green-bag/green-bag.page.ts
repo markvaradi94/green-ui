@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { GreenBag } from '../../dto/green-bag.dto';
 import { Client } from '../../dto/client.dto';
 import { Provider } from '../../dto/provider.dto';
@@ -6,6 +6,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ApiService } from '../../services/api.service';
 import { ProviderService } from '../../services/provider.service';
 import { ClientService } from '../../services/client.service';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'green-bag-page',
@@ -16,11 +18,12 @@ export class GreenBagPage implements OnInit {
 
   bagId: string = null;
   providerId: string = null;
-
   client: Client;
   provider: Provider;
   greenBag: GreenBag;
   amountToOrder: number = 0;
+
+  private unsubscribe = new Subject<void>();
 
   constructor(private activatedRoute: ActivatedRoute,
               private apiService: ApiService,
@@ -37,61 +40,58 @@ export class GreenBagPage implements OnInit {
     this.fetchProviderAndBag();
   }
 
+  ionViewDidLeave() {
+    this.unsubscribe.next();
+    this.unsubscribe.complete();
+  }
+
   addToCart() {
-    const diff = this.greenBag.quantity - this.amountToOrder;
     let newBag = {...this.greenBag};
     newBag.quantity = this.amountToOrder;
 
-    if (this.client?.cart.bags.length !== 0) {
-      let tempBag = this.client.cart.bags.find(bag => bag.id === newBag.id);
-      if (tempBag !== undefined) {
-        tempBag.quantity = tempBag.quantity + newBag.quantity
+    if (this.isFromSameProvider() || this.isCartWithNoProvider()) {
+      this.client.cart.providerId = this.provider.id;
+      if (this.client?.cart.bags.length !== 0) {
+        let tempBag = this.client.cart.bags.find(bag => bag.id === newBag.id);
+        if (tempBag !== undefined) {
+          tempBag.quantity = tempBag.quantity + newBag.quantity
+        } else {
+          this.client.cart.bags.push(newBag);
+        }
       } else {
         this.client.cart.bags.push(newBag);
       }
+
+      this.amountToOrder = 0;
+      this.updateClient(this.client);
     } else {
-      this.client.cart.bags.push(newBag);
+      throw new Error('Cannot add to cart from different restaurant when there are already items in the cart!');
     }
+  }
 
-    this.client.cart.providerId = this.provider.id;
-    this.greenBag.quantity = diff;
+  isFromSameProvider(): boolean {
+    return this.client.cart.providerId === this.provider.id;
+  }
 
-    let providerBag = this.provider.inventory.bags.find(bag => bag.id === this.bagId);
-    providerBag.quantity = diff;
-    this.amountToOrder = 0;
+  isCartWithNoProvider(): boolean {
+    return this.client.cart.providerId === null || this.client.cart.providerId.length === 0;
+  }
 
+  updateClient(client: Client): void {
     const clientPatch = [{
       op: 'replace', path: '/cart', value:
         {
           providerId: this.provider.id,
-          bags: this.client.cart.bags
+          bags: client.cart.bags
         }
     }];
 
-    const providerPatch = [{
-      op: 'replace', path: '/inventory', value:
-        {
-          bags: this.provider.inventory.bags
-        }
-    }];
-
-    this.apiService.patchClient(this.client.id, clientPatch).subscribe(result => {
-      this.clientService.clientSubj.next(result);
-    });
-    this.apiService.patchProvider(this.provider.id, providerPatch).subscribe(result => {
-      this.providerService.providerSubj.next(result);
-    });
-  }
-
-  fetchClient(): void {
-    this.clientService.getClient().then(result => this.client = JSON.parse(result));
-  }
-
-  fetchProviderAndBag(): void {
-    this.apiService.getProvider(this.providerId).subscribe(result => {
-      this.provider = result;
-      this.greenBag = this.provider.inventory.bags.find(bag => bag.id === this.bagId);
-    });
+    this.apiService.patchClient(client.id, clientPatch)
+      .pipe(takeUntil(this.unsubscribe))
+      .subscribe(result => {
+        this.clientService.clientSubj.next(result);
+        this.clientService.saveClient(result);
+      });
   }
 
   canBeIncreased(): boolean {
@@ -112,5 +112,18 @@ export class GreenBagPage implements OnInit {
     if (this.amountToOrder > 0) {
       this.amountToOrder--;
     }
+  }
+
+  private fetchClient(): void {
+    this.clientService.getClient().then(result => this.client = JSON.parse(result));
+  }
+
+  private fetchProviderAndBag(): void {
+    this.apiService.getProvider(this.providerId)
+      .pipe(takeUntil(this.unsubscribe))
+      .subscribe(result => {
+        this.provider = result;
+        this.greenBag = this.provider.inventory.bags.find(bag => bag.id === this.bagId);
+      });
   }
 }

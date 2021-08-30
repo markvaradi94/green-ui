@@ -5,6 +5,9 @@ import { AccountService } from '../../services/account.service';
 import { ClientService } from '../../services/client.service';
 import { Client } from '../../dto/client.dto';
 import { Address } from '../../dto/address.dto';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+import { Account } from '../../dto/account.dto';
 
 @Component({
   selector: 'app-client-details',
@@ -15,6 +18,9 @@ export class ClientDetailsPage implements OnInit {
 
   clientId: string = null;
   client: Client = new Client();
+  account: Account = new Account();
+
+  private unsubscribe = new Subject<void>();
 
   constructor(private apiService: ApiService,
               private accountService: AccountService,
@@ -26,22 +32,38 @@ export class ClientDetailsPage implements OnInit {
   ngOnInit() {
     this.clientId = this.activatedRoute.snapshot.paramMap.get('clientId');
 
-    this.apiService.getClient(this.clientId).subscribe(result => {
-      this.client = result;
-    });
+    this.apiService.getClient(this.clientId)
+      .pipe(takeUntil(this.unsubscribe))
+      .subscribe(result => {
+        this.client = result;
+
+        this.apiService.getAccount(this.client?.accountId)
+          .pipe(takeUntil(this.unsubscribe))
+          .subscribe(result => {
+            this.account = result;
+          });
+      });
 
     this.client.address = new Address();
   }
 
-  editClient() {
+  ionViewDidLeave() {
+    this.unsubscribe.next();
+    this.unsubscribe.complete();
+  }
 
+  editClient() {
     const clientPatch = [
       {op: 'replace', path: '/firstName', value: this.client.firstName},
       {op: 'replace', path: '/lastName', value: this.client.lastName},
       {op: 'replace', path: '/address', value: this.client.address},
     ];
 
-    this.apiService.patchClient(this.client.id, clientPatch).subscribe(() => {});
+    const accountPatch = [
+      {op: 'replace', path: '/phoneNumber', value: this.account.phoneNumber}
+    ]
 
+    this.clientService.patchClient(this.client, clientPatch);
+    this.accountService.patchAccount(this.account, accountPatch);
   }
 }

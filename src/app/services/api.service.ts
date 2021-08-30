@@ -17,6 +17,18 @@ export class ApiService {
     return this.http.get(`${environment.api}/accounts`);
   }
 
+  getAccount(accountId: string): Observable<any> {
+    return this.http.get(`${environment.api}/accounts/${accountId}`);
+  }
+
+  patchAccount(accountId: string, jsonPatch: any): Observable<any> {
+    return this.http.patch(`${environment.api}/accounts/${accountId}`, jsonPatch);
+  }
+
+  patchOrder(orderId: string, jsonPatch: any): Observable<any> {
+    return this.http.patch(`${environment.api}/orders/${orderId}`, jsonPatch);
+  }
+
   getAccountForLogin(params: HttpParams): Observable<any> {
     return this.http.get(`${environment.api}/accounts`, {params});
   }
@@ -59,6 +71,10 @@ export class ApiService {
 
   getAllOrders(): Observable<any> {
     return this.http.get(`${environment.api}/orders`);
+  }
+
+  getFilteredOrders(params: HttpParams): Observable<any> {
+    return this.http.get(`${environment.api}/orders`, {params});
   }
 
   getOrder(orderId: string): Observable<any> {

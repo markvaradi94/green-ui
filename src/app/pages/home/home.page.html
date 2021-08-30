@@ -10,7 +10,7 @@
 </ion-header>
 
 <ion-content>
-  <ion-list>
+  <ion-list *ngIf="shouldShowProviders()">
     <ion-item *ngFor="let provider of providers" (click)="openProvider(provider)">
       {{provider.name}}
     </ion-item>

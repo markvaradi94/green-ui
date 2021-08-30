@@ -28,6 +28,10 @@ const routes: Routes = [
         loadChildren: () => import('../profile/profile.module').then(m => m.ProfilePageModule)
       },
       {
+        path: 'order-history',
+        loadChildren: () => import('../order-history/order-history.module').then( m => m.OrderHistoryPageModule)
+      },
+      {
         path: '',
         redirectTo: '/tabs/home',
         pathMatch: 'full'

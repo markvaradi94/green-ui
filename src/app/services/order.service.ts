@@ -24,6 +24,10 @@ export class OrderService {
     this.storage.set(this.ORDER_STORAGE_KEY, JSON.stringify(order));
   }
 
+  emptyStorage(): void {
+    this.storage.clear();
+  }
+
   placeOrder(order: Order): Observable<any> {
     return this.apiService.addOrder(order);
   }
